@@ -934,7 +934,7 @@
                         <div class="row">
                             <div class="col-xs-12">
                                 <!-- PAGE CONTENT BEGINS -->
-
+                                <router-view/>
                                 <!-- PAGE CONTENT ENDS -->
                             </div><!-- /.col -->
                         </div><!-- /.row -->
@@ -974,3 +974,18 @@
         </div><!-- /.main-container -->
     </div>
 </template>
+
+<script>
+    export default{
+        name:"admin",
+        mounted:function () {
+            $("body").removeClass("login-layout light-login");
+            $("body").attr("class","no-skin" );
+        },
+        methods:{
+            login(){
+                this.$router.push("/admin")
+            }
+        }
+    }
+</script>
