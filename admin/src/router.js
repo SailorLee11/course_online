@@ -42,7 +42,7 @@ export default new Router({
             // name: "welcome",
             component: Welcome,
         },{
-            path: 'chapter',
+            path: 'business/chapter',
             component: Chapter,
         }]
             // {
