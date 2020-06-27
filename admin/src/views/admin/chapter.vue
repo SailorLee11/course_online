@@ -977,7 +977,8 @@
     export default{
         name:"chapter",
         mounted:function () {
-            this.$parent.activeSidebar("business-chapter-sidebar")
+            //sidebar激活样式 方法一
+            // this.$parent.activeSidebar("business-chapter-sidebar")
         },
         methods:{
 

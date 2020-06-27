@@ -43,7 +43,7 @@ export default new Router({
             component: Welcome,
         },{
             path: 'business/chapter',
-            name:"business/chapter",
+            name:"business-chapter-sidebar",
             component: Chapter,
         }]
             // {
