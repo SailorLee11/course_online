@@ -485,21 +485,21 @@
             $("body").removeClass("login-layout light-login");
             $("body").attr("class","no-skin" );
             //sidebar激活样式 方法二
+            let _this = this;
             _this.activeSidebar(_this.$route.name.replace("/", "-") + "-sidebar");
         },
         //监听路由的变化
         watch: {
             $route: {
+                //一旦路由变化了，我们就处理一次 val新的路由，old是老的路由
                 handler:function(val, oldVal){
                     // sidebar激活样式方法二
                     console.log("---->页面跳转：", val, oldVal);
                     let _this = this;
-
-                    if (!_this.hasResourceRouter(val.name)) {
-                        _this.$router.push("/login");
-                        return;
-                    }
-
+                    // if (!_this.hasResourceRouter(val.name)) {
+                    //     _this.$router.push("/login");
+                    //     return;
+                    // }
                     _this.$nextTick(function(){  //页面加载完成后执行
                         _this.activeSidebar(_this.$route.name.replace("/", "-") + "-sidebar");
                     })
