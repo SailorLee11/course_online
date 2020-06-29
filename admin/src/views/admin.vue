@@ -450,7 +450,7 @@
                     <div class="footer-content">
 						<span class="bigger-120">
 							<span class="blue bolder">鱼同</span>
-							在线视频&copy; 2020-2021
+							在线教育&copy; 2020-2021
 						</span>
 
                         &nbsp; &nbsp;
