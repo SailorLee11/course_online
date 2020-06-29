@@ -4,6 +4,7 @@ import com.course.server.domain.Chapter;
 import com.course.server.domain.ChapterExample;
 import com.course.server.dto.ChapterDto;
 import com.course.server.dto.PageDto;
+import com.course.server.dto.ResponseDto;
 import com.course.server.mapper.ChapterMapper;
 import com.course.server.service.ChapterService;
 import org.slf4j.Logger;
@@ -34,16 +35,20 @@ public class ChapterController {
 
     //访问chapter地址
     @RequestMapping("/list")
-    public PageDto list(@RequestBody PageDto pageDto) {
+    public ResponseDto list(@RequestBody PageDto pageDto) {
         LOG.info("pageDto:{}",pageDto);
+        ResponseDto responseDto = new ResponseDto();
         chapterService.list(pageDto);
-        return pageDto;
+        responseDto.setContent(pageDto);
+        return responseDto;
     }
 
     @RequestMapping("/save")
-    public ChapterDto save(@RequestBody ChapterDto chapterDto) {
+    public ResponseDto save(@RequestBody ChapterDto chapterDto) {
         LOG.info("pageDto:{}",chapterDto);
+        ResponseDto responseDto = new ResponseDto();
         chapterService.save(chapterDto);
-        return chapterDto;
+        responseDto.setContent(chapterDto);
+        return responseDto;
     }
 }
