@@ -35,11 +35,8 @@
 
                     <td>
                         <div class="hidden-sm hidden-xs btn-group">
-                            <button class="btn btn-xs btn-success">
-                                <i class="ace-icon fa fa-check bigger-120"></i>
-                            </button>
-
-                            <button class="btn btn-xs btn-info">
+<!--这个chapter就是上面 v-for的变量 -->
+                            <button v-on:click="edit(chapter)" class="btn btn-xs btn-info">
                                 <i class="ace-icon fa fa-pencil bigger-120"></i>
                             </button>
 
@@ -47,9 +44,6 @@
                                 <i class="ace-icon fa fa-trash-o bigger-120"></i>
                             </button>
 
-                            <button class="btn btn-xs btn-warning">
-                                <i class="ace-icon fa fa-flag bigger-120"></i>
-                            </button>
                         </div>
 
                         <div class="hidden-md hidden-lg">
@@ -158,6 +152,12 @@
             add() {
                 let _this = this;
                 _this.chapter = {};
+                $("#form-modal").modal("show");
+            },
+            edit(chapter) {
+                let _this = this;
+                //把chapter复制到{}里面
+                _this.chapter = $.extend({},chapter);
                 $("#form-modal").modal("show");
             },
             /**
