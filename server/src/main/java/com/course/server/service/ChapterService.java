@@ -59,7 +59,7 @@ public class ChapterService {
         }
     }
 
-    public void insert(Chapter chapter){
+    private void insert(Chapter chapter){
         //生成一个新的id
         chapter.setId(UuidUtil.getShortUuid());
 //        Chapter chapter = new Chapter();
@@ -67,7 +67,11 @@ public class ChapterService {
         chapterMapper.insert(chapter);
     }
 
-    public void update(Chapter chapter){
+    private void update(Chapter chapter){
         chapterMapper.updateByPrimaryKey(chapter);
+    }
+
+    public void delete(String id){
+        chapterMapper.deleteByPrimaryKey(id);
     }
 }
