@@ -189,9 +189,10 @@
             save(page){
                 let _this = this;
 
-                // 保存校验
+                // 这是前端的校验 ，后端的校验是请求参数错误，防止别人的渗透测试 保存校验
                 if (!Validator.require(_this.chapter.name, "名称")
-                    || !Validator.length(_this.chapter.courseId, "课程ID", 1, 8)) {
+                    || !Validator.length(_this.chapter.courseId, "课程ID", 1, 8)
+                    || !Validator.require(_this.chapter.courseId, "课程ID")) {
                     return;
                 }
 
@@ -204,6 +205,8 @@
                         $("#form-modal").modal("hide");
                         _this.list(1);
                         Toast.success("保存成功！");
+                    }else{
+                        Toast.warning(resp.message);
                     }
                 })
             },
