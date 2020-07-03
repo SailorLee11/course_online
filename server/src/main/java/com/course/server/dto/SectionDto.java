@@ -1,8 +1,8 @@
-package com.course.server.domain;
+package com.course.server.dto;
 
 import java.util.Date;
 
-public class Section {
+public class SectionDto {
     private String id;
 
     private String title;
