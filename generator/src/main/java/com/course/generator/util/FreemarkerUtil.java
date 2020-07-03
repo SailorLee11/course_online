@@ -1,4 +1,4 @@
-package com.course.generator.test;
+package com.course.generator.util;
 
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
@@ -10,19 +10,24 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class TestUtil {
-
-    static String ftlPath = "generator\\src\\main\\java\\com\\course\\generator\\test\\";
-    static String toPath = "generator\\src\\main\\java\\com\\course\\generator\\test\\";
-
-    public static void main(String[] args) throws IOException, TemplateException {
-//        读取模板
+/**
+ * class:FreemarkerUtil
+ * author: sailor lee
+ * mail:18962364008@163.com
+ * description:
+ */
+public class FreemarkerUtil {
+    static String ftlPath = "generator\\src\\main\\java\\com\\course\\generator\\ftl\\";
+    static Template temp;
+    public static void initConfig(String ftlName) throws IOException {
         Configuration cfg = new Configuration(Configuration.VERSION_2_3_29);
         cfg.setDirectoryForTemplateLoading(new File(ftlPath));
         cfg.setObjectWrapper(new DefaultObjectWrapper(Configuration.VERSION_2_3_29));
-        Template temp = cfg.getTemplate("test.ftl");
-//根据模板生成文件
-        FileWriter fw = new FileWriter(toPath + "Test.java");
+        temp = cfg.getTemplate(ftlName);
+    }
+
+    public static void generator(String FileName) throws IOException, TemplateException {
+        FileWriter fw = new FileWriter(FileName);
         BufferedWriter bw = new BufferedWriter(fw);
         temp.process(null, bw);
         bw.flush();
