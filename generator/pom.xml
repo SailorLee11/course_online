@@ -17,17 +17,21 @@
             <groupId>org.freemarker</groupId>
             <artifactId>freemarker</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.imooc</groupId>
+            <artifactId>server</artifactId>
+        </dependency>
 
-<!--        <dependency>-->
-<!--            <groupId>mysql</groupId>-->
-<!--            <artifactId>mysql-connector-java</artifactId>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
 
 <!--        &lt;!&ndash; 读xml &ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>org.dom4j</groupId>-->
-<!--            <artifactId>dom4j</artifactId>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>org.dom4j</groupId>
+            <artifactId>dom4j</artifactId>
+        </dependency>
 
 <!--        <dependency>-->
 <!--            <groupId>com.course</groupId>-->
