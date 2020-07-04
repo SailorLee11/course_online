@@ -14,15 +14,19 @@ import java.util.Map;
  * description:
  */
 public class ServerGenerator {
-    static String toControllerPath =   "business\\src\\main\\java\\com\\course\\business\\controller\\admin\\";
-    static String toServicePath = "server\\src\\main\\java\\com\\course\\server\\service\\";
+    static String MODULE = "business";
+    static String toControllerPath = MODULE+"\\src\\main\\java\\com\\course\\"+MODULE+"\\controller\\admin\\";
+    static String toServicePath =  "server\\src\\main\\java\\com\\course\\server\\service\\";
     public static void main(String[] args) throws IOException, TemplateException {
         String Domain = "Section";
         String domain = "section";
+        String tableNameCn = "小节";
+        String module = MODULE;
         Map<String,Object>map = new HashMap<>();
         map.put("Domain",Domain);
         map.put("domain",domain);
-
+        map.put("module",module);
+        map.put("tableNameCn",tableNameCn);
 //        读test.ftl 生成Test.java
         FreemarkerUtil.initConfig("service.ftl");
         FreemarkerUtil.generator(toServicePath+Domain+"Service.java",map);
