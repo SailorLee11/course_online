@@ -17,10 +17,11 @@
 
         <table id="simple-table" class="table  table-bordered table-hover">
             <thead>
+
             <tr>
-                <th>ID</th>
-                <th>名称</th>
-                <th>课程ID</th>
+                <#list fieldList as field>
+                    <th>${field.nameCn}</th>
+                </#list>
                 <th>操作</th>
             </tr>
             </thead>
@@ -28,11 +29,9 @@
             <tbody>
             <!-- ${domain}s是在js里面用的变量，${domain}是里面用的变量               -->
             <tr v-for="${domain} in ${domain}s">
-
-                <td>{{${domain}.id}}</td>
-                <td>{{${domain}.name}}</td>
-                <td>{{${domain}.courseId}}</td>
-
+                <#list fieldList as field>
+                    <td>{{${domain}.${field.nameHump}}</td>
+                </#list>
                 <td>
                     <div class="hidden-sm hidden-xs btn-group">
                         <!--这个${domain}就是上面 v-for的变量 -->
@@ -55,9 +54,9 @@
                             <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
                                 <li>
                                     <a href="#" class="tooltip-info" data-rel="tooltip" title="View">
-																			<span class="blue">
-																				<i class="ace-icon fa fa-search-plus bigger-120"></i>
-																			</span>
+                                        <span class="blue">
+                                            <i class="ace-icon fa fa-search-plus bigger-120"></i>
+                                        </span>
                                     </a>
                                 </li>
 
@@ -94,26 +93,16 @@
                     </div>
                     <div class="modal-body">
                         <form class="form-horizontal">
-                            <div class="form-group">
-                                <label class="col-sm-2 control-label">名称</label>
-                                <div class="col-sm-10">
-                                    <input v-model="${domain}.name" class="form-control" placeholder="名称">
-                                </div>
-                            </div>
 
-                            <div class="form-group">
-                                <label class="col-sm-2 control-label">课程ID</label>
-                                <div class="col-sm-10">
-                                    <input v-model="${domain}.courseId" class="form-control" placeholder="课程Id">
+                            <#list fieldList as field>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">${field.nameCn}</label>
+                                    <div class="col-sm-10">
+                                        <input v-model="${domain}.${field.nameHump}" class="form-control" placeholder="名称">
+                                    </div>
                                 </div>
-                            </div>
+                            </#list>
 
-                            <!--                            <div class="form-group">-->
-                            <!--                                <label class="col-sm-2 control-label">课程</label>-->
-                            <!--                                <div class="col-sm-10">-->
-                            <!--                                    <p class="form-control-static">{{course.name}}</p>-->
-                            <!--                                </div>-->
-                            <!--                            </div>-->
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -190,11 +179,7 @@
                 let _this = this;
 
                 // 这是前端的校验 ，后端的校验是请求参数错误，防止别人的渗透测试 保存校验
-                if (!Validator.require(_this.${domain}.name, "名称")
-                    || !Validator.length(_this.${domain}.courseId, "课程ID", 1, 8)
-                    || !Validator.require(_this.${domain}.courseId, "课程ID")) {
-                    return;
-                }
+
 
                 Loading.show();
                 _this.$ajax.post(process.env.VUE_APP_SERVER+'/${module}/admin/${domain}/save',_this.${domain}).then((response)=>{
