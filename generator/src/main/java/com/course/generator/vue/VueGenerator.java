@@ -56,7 +56,7 @@ public class VueGenerator {
 
         // 生成vue
         FreemarkerUtil.initConfig("vue.ftl");
-        FreemarkerUtil.generator(toVuePath + Domain + "Vue.java", map);
+        FreemarkerUtil.generator(toVuePath + domain + ".vue", map);
 
     }
     /**

@@ -1,4 +1,4 @@
-<template>
+  <template>
     <div>
         <p>
             <button v-on:click="add()" class="btn btn-white btn-default btn-round">
@@ -18,26 +18,42 @@
         <table id="simple-table" class="table  table-bordered table-hover">
             <thead>
 
-            <tr><#list fieldList as field>
-                    <th>${field.nameCn}</th></#list>
+            <tr>
+                    <th>id</th>
+                    <th>标题</th>
+                    <th>课程</th>
+                    <th>大章</th>
+                    <th>视频</th>
+                    <th>时长</th>
+                    <th>收费</th>
+                    <th>顺序</th>
+                    <th>创建时间</th>
+                    <th>修改时间</th>
                 <th>操作</th>
             </tr>
             </thead>
 
             <tbody>
-            <!-- ${domain}s是在js里面用的变量，${domain}是里面用的变量               -->
-            <tr v-for="${domain} in ${domain}s">
-                <#list fieldList as field>
-                    <td>{{${domain}.${field.nameHump}}}</td>
-                </#list>
+            <!-- sections是在js里面用的变量，section是里面用的变量               -->
+            <tr v-for="section in sections">
+                    <td>{{section.id}}</td>
+                    <td>{{section.title}}</td>
+                    <td>{{section.courseId}}</td>
+                    <td>{{section.chapterId}}</td>
+                    <td>{{section.video}}</td>
+                    <td>{{section.time}}</td>
+                    <td>{{section.charge}}</td>
+                    <td>{{section.sort}}</td>
+                    <td>{{section.createdAt}}</td>
+                    <td>{{section.updatedAt}}</td>
                 <td>
                     <div class="hidden-sm hidden-xs btn-group">
-                        <!--这个${domain}就是上面 v-for的变量 -->
-                        <button v-on:click="edit(${domain})" class="btn btn-xs btn-info">
+                        <!--这个section就是上面 v-for的变量 -->
+                        <button v-on:click="edit(section)" class="btn btn-xs btn-info">
                             <i class="ace-icon fa fa-pencil bigger-120"></i>
                         </button>
 
-                        <button v-on:click="del(${domain}.id)" class="btn btn-xs btn-danger">
+                        <button v-on:click="del(section.id)" class="btn btn-xs btn-danger">
                             <i class="ace-icon fa fa-trash-o bigger-120"></i>
                         </button>
 
@@ -92,14 +108,66 @@
                     <div class="modal-body">
                         <form class="form-horizontal">
 
-                            <#list fieldList as field>
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label">${field.nameCn}</label>
+                                    <label class="col-sm-2 control-label">id</label>
                                     <div class="col-sm-10">
-                                        <input v-model="${domain}.${field.nameHump}" class="form-control" placeholder="名称">
+                                        <input v-model="section.id" class="form-control" placeholder="名称">
                                     </div>
                                 </div>
-                            </#list>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">标题</label>
+                                    <div class="col-sm-10">
+                                        <input v-model="section.title" class="form-control" placeholder="名称">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">课程</label>
+                                    <div class="col-sm-10">
+                                        <input v-model="section.courseId" class="form-control" placeholder="名称">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">大章</label>
+                                    <div class="col-sm-10">
+                                        <input v-model="section.chapterId" class="form-control" placeholder="名称">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">视频</label>
+                                    <div class="col-sm-10">
+                                        <input v-model="section.video" class="form-control" placeholder="名称">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">时长</label>
+                                    <div class="col-sm-10">
+                                        <input v-model="section.time" class="form-control" placeholder="名称">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">收费</label>
+                                    <div class="col-sm-10">
+                                        <input v-model="section.charge" class="form-control" placeholder="名称">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">顺序</label>
+                                    <div class="col-sm-10">
+                                        <input v-model="section.sort" class="form-control" placeholder="名称">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">创建时间</label>
+                                    <div class="col-sm-10">
+                                        <input v-model="section.createdAt" class="form-control" placeholder="名称">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">修改时间</label>
+                                    <div class="col-sm-10">
+                                        <input v-model="section.updatedAt" class="form-control" placeholder="名称">
+                                    </div>
+                                </div>
 
                         </form>
                     </div>
@@ -117,19 +185,19 @@
 <script>
     import Pagination from "../../components/pagination";
     export default{
-        name:"${domain}",
+        name:"section",
         components: {Pagination},
         data: function(){
             return{
-                ${domain}:{},
-                ${domain}s:[],
+                section:{},
+                sections:[],
             }
         },
         mounted:function () {
             let _this = this;
             _this.list();
             //sidebar激活样式 方法一
-            // this.$parent.activeSidebar("${module}-${domain}-sidebar")
+            // this.$parent.activeSidebar("business-section-sidebar")
         },
         methods:{
             /**
@@ -138,17 +206,17 @@
              */
             add() {
                 let _this = this;
-                _this.${domain} = {};
+                _this.section = {};
                 $("#form-modal").modal("show");
             },
             /**
              * 点击【编辑】
              * 修改
              */
-            edit(${domain}) {
+            edit(section) {
                 let _this = this;
-                //把${domain}复制到{}里面
-                _this.${domain} = $.extend({},${domain});
+                //把section复制到{}里面
+                _this.section = $.extend({},section);
                 $("#form-modal").modal("show");
             },
             /**
@@ -157,14 +225,14 @@
             list(page){
                 let _this = this;
                 Loading.show();
-                _this.$ajax.post(process.env.VUE_APP_SERVER+'/${module}/admin/${domain}/list',{
+                _this.$ajax.post(process.env.VUE_APP_SERVER+'/business/admin/section/list',{
                     page:page,
                     size:_this.$refs.pagination.size,
                 }).then((response)=>{
                     Loading.hide();
-                    console.log("查询${tableNameCn}列表结果:",response);
+                    console.log("查询小节列表结果:",response);
                     let resp = response.data;//resp就是我们responsedto
-                    _this.${domain}s = resp.content.list;
+                    _this.sections = resp.content.list;
                     //重新渲染该组件
                     _this.$refs.pagination.render(page,resp.content.total);
                 })
@@ -180,9 +248,9 @@
 
 
                 Loading.show();
-                _this.$ajax.post(process.env.VUE_APP_SERVER+'/${module}/admin/${domain}/save',_this.${domain}).then((response)=>{
+                _this.$ajax.post(process.env.VUE_APP_SERVER+'/business/admin/section/save',_this.section).then((response)=>{
                     Loading.hide();
-                    console.log("保存${tableNameCn}列表结果:",response);
+                    console.log("保存小节列表结果:",response);
                     let resp = response.data;
                     if (resp.success){
                         $("#form-modal").modal("hide");
@@ -195,10 +263,10 @@
             },
             del(id){
                 let _this = this;
-                Confirm.show("删除${tableNameCn}后不可恢复，确认删除？",function(){
+                Confirm.show("删除小节后不可恢复，确认删除？",function(){
                     Loading.show();
-                    _this.$ajax.delete(process.env.VUE_APP_SERVER+'/${module}/admin/${domain}/delete/'+id).then((response)=> {
-                        console.log("删除${tableNameCn}列表结果:", response);
+                    _this.$ajax.delete(process.env.VUE_APP_SERVER+'/business/admin/section/delete/'+id).then((response)=> {
+                        console.log("删除小节列表结果:", response);
                         let resp = response.data;
                         Loading.hide();
                         if (resp.success) {

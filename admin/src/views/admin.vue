@@ -384,6 +384,8 @@
                                 <b class="arrow"></b>
                             </li>
 
+
+
                             <li class="">
                                 <a href="jqgrid.html">
                                     <i class="menu-icon fa fa-caret-right"></i>
@@ -410,6 +412,16 @@
                                 <router-link to="/business/chapter" class="dropdown-toggle">
                                     <i class="menu-icon fa fa-caret-right"></i>
                                     大章管理
+
+                                </router-link>
+
+                                <b class="arrow"></b>
+                            </li>
+
+                            <li class="active">
+                                <router-link to="/business/section" class="dropdown-toggle">
+                                    <i class="menu-icon fa fa-caret-right"></i>
+                                    小节管理
 
                                 </router-link>
 
