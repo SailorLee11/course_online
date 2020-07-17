@@ -19,6 +19,12 @@ import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
+<#list typeSet as type>
+    <#if type == 'Date'>
+        import java.util.Date;
+    </#if>
+</#list>
+
 /**
  * class:${Domain}Controller
  * author: sailor lee
@@ -35,18 +41,24 @@ public class ${Domain}Service {
     public void list(PageDto pageDto){
         PageHelper.startPage(pageDto.getPage(),pageDto.getSize());
         ${Domain}Example ${domain}Example = new ${Domain}Example();
+        <#list fieldList as field>
+            <#if field.nameHump == 'sort'>
+                ${domain}Example.setOrderByClause("sort asc");
+            </#if>
+        </#list>
+
         List<${Domain}> ${domain}List = ${domain}Mapper.selectByExample(${domain}Example);
 //        将查出来的${domain}list传到分页里面去
         PageInfo<${Domain}> pageInfo = new PageInfo<>(${domain}List);
-        List<${Domain}Dto>${domain}DtoList = new ArrayList<${Domain}Dto>();
+        List<${Domain}Dto> ${domain}DtoList = CopyUtil.copyList(${domain}List, ${Domain}Dto.class);
 //      gettotal获取总行数
         pageDto.setTotal(pageInfo.getTotal());
-        for (int i = 0,l = ${domain}List.size();i<l;i++){
-            ${Domain} ${domain} =  ${domain}List.get(i);
-            ${Domain}Dto ${domain}Dto = new ${Domain}Dto();
-            BeanUtils.copyProperties(${domain},${domain}Dto);
-            ${domain}DtoList.add(${domain}Dto);
-        }
+        // for (int i = 0,l = ${domain}List.size();i<l;i++){
+           // ${Domain} ${domain} =  ${domain}List.get(i);
+           // ${Domain}Dto ${domain}Dto = new ${Domain}Dto();
+            //BeanUtils.copyProperties(${domain},${domain}Dto);
+          //  ${domain}DtoList.add(${domain}Dto);
+        //}
         pageDto.setList(${domain}DtoList);
     }
 
@@ -60,14 +72,26 @@ public class ${Domain}Service {
     }
 
     private void insert(${Domain} ${domain}){
+        Date now = new Date();
+        <#list fieldList as field>
+            <#if field.nameHump=='createdAt'>
+                ${domain}.setCreatedAt(now);
+            </#if>
+            <#if field.nameHump=='updatedAt'>
+                ${domain}.setUpdatedAt(now);
+            </#if>
+        </#list>
         //生成一个新的id
         ${domain}.setId(UuidUtil.getShortUuid());
-//        ${Domain} ${domain} = new ${Domain}();
-//        BeanUtils.copyProperties(${domain},${domain});
         ${domain}Mapper.insert(${domain});
     }
 
     private void update(${Domain} ${domain}){
+        <#list fieldList as field>
+            <#if field.nameHump=='updatedAt'>
+                ${domain}.setUpdatedAt(new Date());
+            </#if>
+        </#list>
         ${domain}Mapper.updateByPrimaryKey(${domain});
     }
 

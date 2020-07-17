@@ -19,7 +19,9 @@
             <thead>
 
             <tr><#list fieldList as field>
-                    <th>${field.nameCn}</th></#list>
+                    <#if field.nameHump!="createdAt" && field.nameHump!="updatedAt">
+                    <th>${field.nameCn}</th></#if></#list>
+
                 <th>操作</th>
             </tr>
             </thead>
@@ -28,7 +30,9 @@
             <!-- ${domain}s是在js里面用的变量，${domain}是里面用的变量               -->
             <tr v-for="${domain} in ${domain}s">
                 <#list fieldList as field>
+                  <#if field.nameHump!="createdAt" && field.nameHump!="updatedAt">
                     <td>{{${domain}.${field.nameHump}}}</td>
+                  </#if>
                 </#list>
                 <td>
                     <div class="hidden-sm hidden-xs btn-group">
@@ -93,12 +97,14 @@
                         <form class="form-horizontal">
 
                             <#list fieldList as field>
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label">${field.nameCn}</label>
-                                    <div class="col-sm-10">
-                                        <input v-model="${domain}.${field.nameHump}" class="form-control" placeholder="名称">
+                                <#if field.name!="id" && field.nameHump!="createdAt" && field.nameHump!="updatedAt">
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">${field.nameCn}</label>
+                                            <div class="col-sm-10">
+                                                <input v-model="${domain}.${field.nameHump}" class="form-control">
+                                            </div>
                                     </div>
-                                </div>
+                                </#if>
                             </#list>
 
                         </form>
@@ -175,22 +181,21 @@
              */
             save(page){
                 let _this = this;
-
                 // 这是前端的校验 ，后端的校验是请求参数错误，防止别人的渗透测试 保存校验
-
                 if (1 != 1
                     <#list fieldList as field>
+                    <#if field.name!="id" && field.nameHump!="createdAt" && field.nameHump!="updatedAt" && field.nameHump!="sort">
                         <#if !field.nullAble>
-                        || !Validator.require(_this.${domain}.${field.nameHump}, "${field.nameCn}")
+                            ||!Validator.require(_this.${domain}.${field.nameHump}, "${field.nameCn}")
                         </#if>
-                    <#if (field.length > 0)>
-                        || !Validator.length(_this.${domain}.${field.nameHump}, "${field.nameCn}",1,${field.length})
+                        <#if (field.length > 0)>
+                            ||!Validator.length(_this.${domain}.${field.nameHump}, "${field.nameCn}",1,${field.length})
+                        </#if>
                     </#if>
                 </#list>
                 ){
                     return ;
                 }
-
                 Loading.show();
                 _this.$ajax.post(process.env.VUE_APP_SERVER+'/${module}/admin/${domain}/save',_this.${domain}).then((response)=>{
                     Loading.hide();

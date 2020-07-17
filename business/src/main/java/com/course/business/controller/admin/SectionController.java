@@ -47,9 +47,9 @@ public class SectionController {
     public ResponseDto save(@RequestBody SectionDto sectionDto) {
 
         // 保存校验
-        ValidatorUtil.require(sectionDto.getTitle(), "标题");
-        ValidatorUtil.length(sectionDto.getTitle(), "标题",1,50);
-        ValidatorUtil.length(sectionDto.getVideo(), "视频",1,200);
+                ValidatorUtil.require(sectionDto.getTitle(), "标题");
+                ValidatorUtil.length(sectionDto.getTitle(), "标题",1,50);
+                ValidatorUtil.length(sectionDto.getVideo(), "视频",1,200);
        // LOG.info("pageDto:{}",sectionDto);
         // 后端的防止渗透校验 保存校验
        // ValidatorUtil.require(sectionDto.getName(), "名称");
