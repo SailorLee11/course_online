@@ -174,7 +174,7 @@
             return{
                 section:{},
                 sections:[],
-                SECTION_CHARGE:[{key:"C",value:"收费"},{key:"F",value:"免费"}]
+                SECTION_CHARGE:SECTION_CHARGE,
             }
         },
         mounted:function () {
