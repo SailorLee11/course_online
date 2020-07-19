@@ -1,11 +1,8 @@
 package com.course.business.controller.admin;
 
-import com.course.server.domain.Course;
-import com.course.server.domain.CourseExample;
 import com.course.server.dto.CourseDto;
 import com.course.server.dto.PageDto;
 import com.course.server.dto.ResponseDto;
-import com.course.server.mapper.CourseMapper;
 import com.course.server.service.CourseService;
 import com.course.server.util.ValidatorUtil;
 import org.slf4j.Logger;
@@ -13,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 /**
  * class:CourseController
@@ -45,11 +41,17 @@ public class CourseController {
 
     @PostMapping("/save")
     public ResponseDto save(@RequestBody CourseDto courseDto) {
-        LOG.info("pageDto:{}",courseDto);
+
+        // 保存校验
+                ValidatorUtil.require(courseDto.getName(), "名称");
+                ValidatorUtil.length(courseDto.getName(), "名称",1,50);
+                ValidatorUtil.length(courseDto.getSummary(), "概述",1,2000);
+                ValidatorUtil.length(courseDto.getImage(), "封面",1,100);
+       // LOG.info("pageDto:{}",courseDto);
         // 后端的防止渗透校验 保存校验
-        ValidatorUtil.require(courseDto.getName(), "名称");
-        ValidatorUtil.require(courseDto.getId(), "课程ID");
-        ValidatorUtil.length(courseDto.getId(), "课程ID", 1, 8);
+       // ValidatorUtil.require(courseDto.getName(), "名称");
+       // ValidatorUtil.require(courseDto.getCourseId(), "课程ID");
+        // ValidatorUtil.length(courseDto.getCourseId(), "课程ID", 1, 8);
 
         ResponseDto responseDto = new ResponseDto();
         courseService.save(courseDto);

@@ -19,6 +19,8 @@ import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
+        import java.util.Date;
+
 /**
  * class:CourseController
  * author: sailor lee
@@ -35,18 +37,20 @@ public class CourseService {
     public void list(PageDto pageDto){
         PageHelper.startPage(pageDto.getPage(),pageDto.getSize());
         CourseExample courseExample = new CourseExample();
+                courseExample.setOrderByClause("sort asc");
+
         List<Course> courseList = courseMapper.selectByExample(courseExample);
 //        将查出来的courselist传到分页里面去
         PageInfo<Course> pageInfo = new PageInfo<>(courseList);
-        List<CourseDto>courseDtoList = new ArrayList<CourseDto>();
+        List<CourseDto> courseDtoList = CopyUtil.copyList(courseList, CourseDto.class);
 //      gettotal获取总行数
         pageDto.setTotal(pageInfo.getTotal());
-        for (int i = 0,l = courseList.size();i<l;i++){
-            Course course =  courseList.get(i);
-            CourseDto courseDto = new CourseDto();
-            BeanUtils.copyProperties(course,courseDto);
-            courseDtoList.add(courseDto);
-        }
+        // for (int i = 0,l = courseList.size();i<l;i++){
+           // Course course =  courseList.get(i);
+           // CourseDto courseDto = new CourseDto();
+            //BeanUtils.copyProperties(course,courseDto);
+          //  courseDtoList.add(courseDto);
+        //}
         pageDto.setList(courseDtoList);
     }
 
@@ -60,14 +64,16 @@ public class CourseService {
     }
 
     private void insert(Course course){
+        Date now = new Date();
+                course.setCreatedAt(now);
+                course.setUpdatedAt(now);
         //生成一个新的id
         course.setId(UuidUtil.getShortUuid());
-//        Course course = new Course();
-//        BeanUtils.copyProperties(course,course);
         courseMapper.insert(course);
     }
 
     private void update(Course course){
+                course.setUpdatedAt(new Date());
         courseMapper.updateByPrimaryKey(course);
     }
 
