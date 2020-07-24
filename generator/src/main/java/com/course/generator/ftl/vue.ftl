@@ -14,7 +14,6 @@
 
         <!--        绑定一个list方法，及获取外部主键list的方法-->
         <pagination ref="pagination" v-bind:list="list"></pagination>
-
         <table id="simple-table" class="table  table-bordered table-hover">
             <thead>
 
@@ -31,7 +30,11 @@
             <tr v-for="${domain} in ${domain}s">
                 <#list fieldList as field>
                   <#if field.nameHump!="createdAt" && field.nameHump!="updatedAt">
-                    <td>{{${domain}.${field.nameHump}}}</td>
+                      <#if field.enums>
+                          <td>{{${field.enumsConst} | optionKV(${domain}.${field.nameHump})}}</td>
+                      <#else>
+                          <td>{{${domain}.${field.nameHump}}}</td>
+                      </#if>
                   </#if>
                 </#list>
                 <td>
@@ -46,43 +49,8 @@
                         </button>
 
                     </div>
-
-                    <div class="hidden-md hidden-lg">
-                        <div class="inline pos-rel">
-                            <button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
-                                <i class="ace-icon fa fa-cog icon-only bigger-110"></i>
-                            </button>
-
-                            <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-                                <li>
-                                    <a href="#" class="tooltip-info" data-rel="tooltip" title="View">
-                                        <span class="blue">
-                                            <i class="ace-icon fa fa-search-plus bigger-120"></i>
-                                        </span>
-                                    </a>
-                                </li>
-
-                                <li>
-                                    <a href="#" class="tooltip-success" data-rel="tooltip" title="Edit">
-																			<span class="green">
-																				<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
-																			</span>
-                                    </a>
-                                </li>
-
-                                <li>
-                                    <a href="#" class="tooltip-error" data-rel="tooltip" title="Delete">
-																			<span class="red">
-																				<i class="ace-icon fa fa-trash-o bigger-120"></i>
-																			</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
                 </td>
             </tr>
-
             </tbody>
         </table>
 
@@ -95,15 +63,25 @@
                     </div>
                     <div class="modal-body">
                         <form class="form-horizontal">
-
                             <#list fieldList as field>
                                 <#if field.name!="id" && field.nameHump!="createdAt" && field.nameHump!="updatedAt">
+                                    <#if field.enums>
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label">${field.nameCn}</label>
                                             <div class="col-sm-10">
-                                                <input v-model="${domain}.${field.nameHump}" class="form-control">
+                                               <select v-model="${domain}.${field.nameHump}" class="form-control">
+                                                    <option v-for="o in ${field.enumsConst}" v-bind:value="o.key">{{o.value}}</option>
+                                                </select>
                                             </div>
                                     </div>
+                                    <#else>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">${field.nameCn}</label>
+                                        <div class="col-sm-10">
+                                          <input v-model="${domain}.${field.nameHump}" class="form-control">
+                                        </div>
+                                    </div>
+                                </#if>
                                 </#if>
                             </#list>
 
@@ -129,6 +107,11 @@
             return{
                 ${domain}:{},
                 ${domain}s:[],
+                <#list fieldList as field>
+                    <#if field.enums>
+                        ${field.enumsConst}: ${field.enumsConst},
+                    </#if>
+                </#list>
             }
         },
         mounted:function () {
