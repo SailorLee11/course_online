@@ -5,7 +5,7 @@
                 <i class="ace-icon fa fa-edit"></i>
                 新增
             </button>
-            &nbsp;
+            &nbsp;&nbsp;
             <button v-on:click="list(1)" class="btn btn-white btn-default btn-round">
                 <i class="ace-icon fa fa-refresh "></i>
                 刷新
@@ -46,6 +46,9 @@
                             <span class="badge badge-info">时长：{{course.time}}</span>
                         </p>
                         <p>
+                            <button v-on:click="toChapter(course)" class="btn btn-white btn-xs btn-info btn-round">
+                                大章
+                            </button>
                             <button v-on:click="edit(course)" class="btn btn-white btn-xs btn-info btn-round">
                                 编辑
                             </button>
@@ -166,6 +169,12 @@
         },
         mounted:function () {
             let _this = this;
+            _this.$refs.pagination.size = 5;
+            let course = SessionStorage.get("course") || {};
+            if (Tool.isEmpty(course)){
+                _this.$router.push("/welcome");
+            }
+            _this.course = course;
             _this.list();
             //sidebar激活样式 方法一
             // this.$parent.activeSidebar("business-course-sidebar")
@@ -251,8 +260,15 @@
                         }
                     })
                 });
-                
-            }
+            },
+            /**
+             * 点击【大章】
+             */
+            toChapter(course) {
+                let _this = this;
+                SessionStorage.set("course",course);
+                _this.$router.push("/business/chapter");
+            },
         }
     }
 </script>
