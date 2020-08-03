@@ -2,8 +2,8 @@ package com.course.server.service;
 
 import com.course.server.domain.Section;
 import com.course.server.domain.SectionExample;
-import com.course.server.dto.PageDto;
 import com.course.server.dto.SectionDto;
+import com.course.server.dto.SectionPageDto;
 import com.course.server.enums.SectionChargeEnum;
 import com.course.server.mapper.SectionMapper;
 import com.course.server.util.CopyUtil;
@@ -30,24 +30,30 @@ public class SectionService {
     @Resource
     private SectionMapper sectionMapper;
 
-    public void list(PageDto pageDto){
-        PageHelper.startPage(pageDto.getPage(),pageDto.getSize());
+    public void list(SectionPageDto sectionPageDto){
+        PageHelper.startPage(sectionPageDto.getPage(),sectionPageDto.getSize());
         SectionExample sectionExample = new SectionExample();
-                sectionExample.setOrderByClause("sort asc");
-
+        SectionExample.Criteria criteria = sectionExample.createCriteria();
+        if (!StringUtils.isEmpty(sectionPageDto.getCourseId())) {
+            criteria.andCourseIdEqualTo(sectionPageDto.getCourseId());
+        }
+        if (!StringUtils.isEmpty(sectionPageDto.getChapterId())) {
+            criteria.andChapterIdEqualTo(sectionPageDto.getChapterId());
+        }
+        sectionExample.setOrderByClause("sort asc");
         List<Section> sectionList = sectionMapper.selectByExample(sectionExample);
 //        将查出来的sectionlist传到分页里面去
         PageInfo<Section> pageInfo = new PageInfo<>(sectionList);
         List<SectionDto> sectionDtoList = CopyUtil.copyList(sectionList, SectionDto.class);
 //      gettotal获取总行数
-        pageDto.setTotal(pageInfo.getTotal());
+        sectionPageDto.setTotal(pageInfo.getTotal());
         // for (int i = 0,l = sectionList.size();i<l;i++){
            // Section section =  sectionList.get(i);
            // SectionDto sectionDto = new SectionDto();
             //BeanUtils.copyProperties(section,sectionDto);
           //  sectionDtoList.add(sectionDto);
         //}
-        pageDto.setList(sectionDtoList);
+        sectionPageDto.setList(sectionDtoList);
     }
 
     public void save(SectionDto sectionDto){
