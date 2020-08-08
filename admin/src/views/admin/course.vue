@@ -43,7 +43,7 @@
                         <p>
                             <span class="badge badge-info">{{course.id}}</span>
                             <span class="badge badge-info">排序：{{course.sort}}</span>
-                            <span class="badge badge-info">时长：{{course.time}}</span>
+                            <span class="badge badge-info">时长：{{course.time | formatSecond}}</span>
                         </p>
                         <p>
                             <button v-on:click="toChapter(course)" class="btn btn-white btn-xs btn-info btn-round">
@@ -84,7 +84,7 @@
                                             </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-sm-2 control-label">时长</label>
+                                        <label class="col-sm-2 control-label">时长(秒)</label>
                                             <div class="col-sm-10">
                                                 <input v-model="course.time" class="form-control">
                                             </div>
