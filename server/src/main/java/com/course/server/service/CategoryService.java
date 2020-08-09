@@ -40,13 +40,15 @@ public class CategoryService {
         List<CategoryDto> categoryDtoList = CopyUtil.copyList(categoryList, CategoryDto.class);
 //      gettotal获取总行数
         pageDto.setTotal(pageInfo.getTotal());
-        // for (int i = 0,l = categoryList.size();i<l;i++){
-           // Category category =  categoryList.get(i);
-           // CategoryDto categoryDto = new CategoryDto();
-            //BeanUtils.copyProperties(category,categoryDto);
-          //  categoryDtoList.add(categoryDto);
-        //}
         pageDto.setList(categoryDtoList);
+    }
+
+    public List<CategoryDto> all(){
+        CategoryExample categoryExample = new CategoryExample();
+        categoryExample.setOrderByClause("sort asc");
+        List<Category> categoryList = categoryMapper.selectByExample(categoryExample);
+        List<CategoryDto> categoryDtoList = CopyUtil.copyList(categoryList, CategoryDto.class);
+        return categoryDtoList;
     }
 
     public void save(CategoryDto categoryDto){

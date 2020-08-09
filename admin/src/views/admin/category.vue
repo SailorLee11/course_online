@@ -1,55 +1,96 @@
 <template>
     <div>
-        <p>
-            <button v-on:click="add()" class="btn btn-white btn-default btn-round">
-                <i class="ace-icon fa fa-edit"></i>
-                新增
-            </button>
-            &nbsp;
-            <button v-on:click="list(1)" class="btn btn-white btn-default btn-round">
-                <i class="ace-icon fa fa-refresh "></i>
-                刷新
-            </button>
-        </p>
+        <div class="row">
+            <div class="col-md-6">
+                <p>
+                    <button v-on:click="add()" class="btn btn-white btn-default btn-round">
+                        <i class="ace-icon fa fa-edit"></i>
+                        新增
+                    </button>
+                    &nbsp;
+                    <button v-on:click="all()" class="btn btn-white btn-default btn-round">
+                        <i class="ace-icon fa fa-refresh "></i>
+                        刷新
+                    </button>
+                </p>
 
-        <!--        绑定一个list方法，及获取外部主键list的方法-->
-        <pagination ref="pagination" v-bind:list="list"></pagination>
-        <table id="simple-table" class="table  table-bordered table-hover">
-            <thead>
+                <table id="level1-table" class="table  table-bordered table-hover">
+                    <thead>
 
-            <tr>
-                    <th>id</th>
-                    <th>父id</th>
-                    <th>名称</th>
-                    <th>顺序</th>
+                    <tr>
+                        <th>id</th>
+                        <th>名称</th>
+                        <th>顺序</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
 
-                <th>操作</th>
-            </tr>
-            </thead>
+                    <tbody>
+                    <!-- categorys是在js里面用的变量，category是里面用的变量               -->
+                    <tr v-for="category in level1" v-on:click="onClickLevel1(category)" v-bind:class="{'active':category.id===active.id}">
+                        <td>{{category.id}}</td>
+                        <td>{{category.name}}</td>
+                        <td>{{category.sort}}</td>
+                        <td>
+                            <div class="hidden-sm hidden-xs btn-group">
+                                <!--这个category就是上面 v-for的变量 -->
+                                <button v-on:click="edit(category)" class="btn btn-xs btn-info">
+                                    <i class="ace-icon fa fa-pencil bigger-120"></i>
+                                </button>
 
-            <tbody>
-            <!-- categorys是在js里面用的变量，category是里面用的变量               -->
-            <tr v-for="category in categorys">
-                          <td>{{category.id}}</td>
-                          <td>{{category.parent}}</td>
-                          <td>{{category.name}}</td>
-                          <td>{{category.sort}}</td>
-                <td>
-                    <div class="hidden-sm hidden-xs btn-group">
-                        <!--这个category就是上面 v-for的变量 -->
-                        <button v-on:click="edit(category)" class="btn btn-xs btn-info">
-                            <i class="ace-icon fa fa-pencil bigger-120"></i>
-                        </button>
+                                <button v-on:click="del(category.id)" class="btn btn-xs btn-danger">
+                                    <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                                </button>
 
-                        <button v-on:click="del(category.id)" class="btn btn-xs btn-danger">
-                            <i class="ace-icon fa fa-trash-o bigger-120"></i>
-                        </button>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-6">
+                <p>
+                    <button v-on:click="add()" class="btn btn-white btn-default btn-round">
+                        <i class="ace-icon fa fa-edit"></i>
+                        新增
+                    </button>
+                </p>
 
-                    </div>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+                <table id="level2-table" class="table  table-bordered table-hover">
+                    <thead>
+                    <tr>
+                        <th>id</th>
+                        <th>名称</th>
+                        <th>顺序</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <!-- categorys是在js里面用的变量，category是里面用的变量               -->
+                    <tr v-for="category in level2">
+                        <td>{{category.id}}</td>
+                        <td>{{category.name}}</td>
+                        <td>{{category.sort}}</td>
+                        <td>
+                            <div class="hidden-sm hidden-xs btn-group">
+                                <!--这个category就是上面 v-for的变量 -->
+                                <button v-on:click="edit(category)" class="btn btn-xs btn-info">
+                                    <i class="ace-icon fa fa-pencil bigger-120"></i>
+                                </button>
+
+                                <button v-on:click="del(category.id)" class="btn btn-xs btn-danger">
+                                    <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                                </button>
+
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
 
         <div id="form-modal" class="modal fade" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
@@ -93,19 +134,20 @@
 
 
 <script>
-    import Pagination from "../../components/pagination";
     export default{
         name:"business-category",
-        components: {Pagination},
         data: function(){
             return{
                 category:{},
                 categorys:[],
+                level1:[],
+                level2:[],
+                active:{},
             }
         },
         mounted:function () {
             let _this = this;
-            _this.list();
+            _this.all();
             //sidebar激活样式 方法一
             // this.$parent.activeSidebar("business-category-sidebar")
         },
@@ -132,26 +174,39 @@
             /**
              * 列表
              */
-            list(page){
+            all(){
                 let _this = this;
                 Loading.show();
-                _this.$ajax.post(process.env.VUE_APP_SERVER+'/business/admin/category/list',{
-                    page:page,
-                    size:_this.$refs.pagination.size,
-                }).then((response)=>{
+                _this.$ajax.post(process.env.VUE_APP_SERVER+'/business/admin/category/all').then((response)=>{
                     Loading.hide();
                     console.log("查询分类列表结果:",response);
                     let resp = response.data;//resp就是我们responsedto
-                    _this.categorys = resp.content.list;
-                    //重新渲染该组件
-                    _this.$refs.pagination.render(page,resp.content.total);
+                    _this.categorys = resp.content;
+
+                    // 将所有记录格式化成树形结构
+                    _this.level1 = [];//在格式化前先把level1清空
+                    for (let i = 0; i < _this.categorys.length; i++) {
+                        let c = _this.categorys[i];
+                        if (c.parent === '00000000') {
+                            _this.level1.push(c);
+                            for (let j = 0; j < _this.categorys.length; j++) {
+                                let child = _this.categorys[j];
+                                if (child.parent === c.id) {
+                                    if (Tool.isEmpty(c.children)) {
+                                        c.children = [];
+                                    }
+                                    c.children.push(child);
+                                }
+                            }
+                        }
+                    }
                 })
             },
 
             /**
              * 点击【保存】
              */
-            save(page){
+            save(){
                 let _this = this;
                 // 这是前端的校验 ，后端的校验是请求参数错误，防止别人的渗透测试 保存校验
                 if (1 != 1
@@ -168,7 +223,7 @@
                     let resp = response.data;
                     if (resp.success){
                         $("#form-modal").modal("hide");
-                        _this.list(1);
+                        _this.all();
                         Toast.success("保存成功！");
                     }else{
                         Toast.warning(resp.message);
@@ -184,13 +239,24 @@
                         let resp = response.data;
                         Loading.hide();
                         if (resp.success) {
-                            _this.list(1);
+                            _this.all();
                             Toast.success("删除成功！")
                         }
                     })
                 });
-                
-            }
+            },
+            onClickLevel1(category) {
+                let _this = this;
+                _this.active = category;
+                _this.level2 = category.children;
+            },
+
         }
     }
 </script>
+
+<style scoped>
+    .active td {
+        background-color: #d6e9c6 !important;
+    }
+</style>
