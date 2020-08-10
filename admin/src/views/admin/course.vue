@@ -71,6 +71,12 @@
                         <form class="form-horizontal">
 
                                     <div class="form-group">
+                                        <label class="col-sm-2 control-label">分类</label>
+                                        <div class="col-sm-10">
+                                            <ul id="tree" class="ztree"></ul>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
                                         <label class="col-sm-2 control-label">名称</label>
                                             <div class="col-sm-10">
                                                 <input v-model="course.name" class="form-control">
@@ -164,11 +170,13 @@
                 COURSE_LEVEL:COURSE_LEVEL,
                 COURSE_CHARGE:COURSE_CHARGE,
                 COURSE_STATUS:COURSE_STATUS,
+                categorys:[],
             }
         },
         mounted:function () {
             let _this = this;
             _this.$refs.pagination.size = 5;
+            _this.allCategory();
             // let course = SessionStorage.get("course") || {};
             // if (Tool.isEmpty(course)){
             //     _this.$router.push("/welcome");
@@ -268,6 +276,47 @@
                 SessionStorage.set("course",course);
                 _this.$router.push("/business/chapter");
             },
+
+            /**
+             * 初始的时候查分类，查到之后再去init
+             */
+            allCategory(){
+                let _this = this;
+                Loading.show();
+                _this.$ajax.post(process.env.VUE_APP_SERVER+'/business/admin/category/all').then((response)=>{
+                    Loading.hide();
+                    console.log("查询分类列表结果:",response);
+                    let resp = response.data;//resp就是我们responsedto
+                    _this.categorys = resp.content;
+
+                    _this.initTree();
+                })
+            },
+
+
+
+            initTree() {
+                let _this = this;
+                let setting = {
+                    check: {
+                        enable: true
+                    },
+                    data: {
+                        simpleData: {
+                            idKey: "id",
+                            pIdKey: "parent",
+                            rootPId: "00000000",
+                            enable: true
+                        }
+                    }
+                };
+                let zNodes = _this.categorys;
+
+                _this.tree = $.fn.zTree.init($("#tree"), setting, zNodes);
+
+                // 展开所有的节点
+                // _this.tree.expandAll(true);
+            },
         }
     }
 </script>
@@ -275,5 +324,11 @@
 <style scoped>
     .caption h3 {
         font-size: 20px;
+    }
+
+    @media (max-width: 1199px) {
+        .caption h3 {
+            font-size: 16px;
+        }
     }
 </style>
