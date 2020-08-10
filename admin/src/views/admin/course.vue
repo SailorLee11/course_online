@@ -11,7 +11,6 @@
                 刷新
             </button>
         </p>
-
         <!--        绑定一个list方法，及获取外部主键list的方法-->
         <pagination ref="pagination" v-bind:list="list"></pagination>
 
@@ -170,11 +169,11 @@
         mounted:function () {
             let _this = this;
             _this.$refs.pagination.size = 5;
-            let course = SessionStorage.get("course") || {};
-            if (Tool.isEmpty(course)){
-                _this.$router.push("/welcome");
-            }
-            _this.course = course;
+            // let course = SessionStorage.get("course") || {};
+            // if (Tool.isEmpty(course)){
+            //     _this.$router.push("/welcome");
+            // }
+            // _this.course = course;
             _this.list();
             //sidebar激活样式 方法一
             // this.$parent.activeSidebar("business-course-sidebar")
@@ -221,7 +220,7 @@
             /**
              * 点击【保存】
              */
-            save(page){
+            save(){
                 let _this = this;
                 // 这是前端的校验 ，后端的校验是请求参数错误，防止别人的渗透测试 保存校验
                 if (1 != 1
