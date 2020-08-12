@@ -160,6 +160,7 @@
 
 <script>
     import Pagination from "../../components/pagination";
+    import category from "./category";
     export default{
         name:"business-course",
         components: {Pagination},
@@ -171,6 +172,7 @@
                 COURSE_CHARGE:COURSE_CHARGE,
                 COURSE_STATUS:COURSE_STATUS,
                 categorys:[],
+                tree:{},
             }
         },
         mounted:function () {
@@ -239,6 +241,13 @@
                 ){
                     return ;
                 }
+                let categorys = _this.tree.getCheckedNodes();
+                if (Tool.isEmpty(categorys)){
+                    Toast.warning("请选择分类！");
+                    return;
+                }
+                console.log(categorys);
+                _this.course.categorys = categorys;
                 Loading.show();
                 _this.$ajax.post(process.env.VUE_APP_SERVER+'/business/admin/course/save',_this.course).then((response)=>{
                     Loading.hide();
@@ -313,7 +322,7 @@
                 let zNodes = _this.categorys;
 
                 _this.tree = $.fn.zTree.init($("#tree"), setting, zNodes);
-
+                tree.getCheckedNodes();
                 // 展开所有的节点
                 // _this.tree.expandAll(true);
             },
