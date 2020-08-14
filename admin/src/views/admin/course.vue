@@ -160,7 +160,7 @@
 
 <script>
     import Pagination from "../../components/pagination";
-    import category from "./category";
+
     export default{
         name:"business-course",
         components: {Pagination},
@@ -179,12 +179,7 @@
             let _this = this;
             _this.$refs.pagination.size = 5;
             _this.allCategory();
-            // let course = SessionStorage.get("course") || {};
-            // if (Tool.isEmpty(course)){
-            //     _this.$router.push("/welcome");
-            // }
-            // _this.course = course;
-            _this.list();
+            _this.list(1);
             //sidebar激活样式 方法一
             // this.$parent.activeSidebar("business-course-sidebar")
         },
@@ -196,6 +191,7 @@
             add() {
                 let _this = this;
                 _this.course = {};
+                _this.tree.checkAllNodes(false);
                 $("#form-modal").modal("show");
             },
             /**
@@ -206,6 +202,7 @@
                 let _this = this;
                 //把course复制到{}里面
                 _this.course = $.extend({},course);
+                _this.listCategory(course.id);
                 $("#form-modal").modal("show");
             },
             /**
@@ -297,12 +294,15 @@
                     console.log("查询分类列表结果:",response);
                     let resp = response.data;//resp就是我们responsedto
                     _this.categorys = resp.content;
-
+                    // console.log("tree:",_this.tree);
+                    // _this.tree.checkAllNodes(false);
+                    // for (let i = 0;i<categorys.length;i++){
+                    //     let node = _this.tree.getNodeByParam("id",categorys[i].categoryId);
+                    //     _this.tree.checkNode(node,true);
+                    // }
                     _this.initTree();
                 })
             },
-
-
 
             initTree() {
                 let _this = this;
@@ -322,9 +322,31 @@
                 let zNodes = _this.categorys;
 
                 _this.tree = $.fn.zTree.init($("#tree"), setting, zNodes);
-                tree.getCheckedNodes();
+                // tree.getCheckedNodes();
                 // 展开所有的节点
-                // _this.tree.expandAll(true);
+                _this.tree.expandAll(true);
+            },
+
+            /**
+             * 查找课程下所有分类
+             * @param courseId
+             */
+            listCategory(courseId) {
+                let _this = this;
+                Loading.show();
+                _this.$ajax.post(process.env.VUE_APP_SERVER + '/business/admin/course/list-category/' + courseId).then((res)=>{
+                    Loading.hide();
+                    console.log("查找课程下所有分类结果：", res);
+                    let response = res.data;
+                    let categorys = response.content;
+
+                    // 勾选查询到的分类
+                    _this.tree.checkAllNodes(false);
+                    for (let i = 0; i < categorys.length; i++) {
+                        let node = _this.tree.getNodeByParam("id", categorys[i].categoryId);
+                        _this.tree.checkNode(node, true);
+                    }
+                })
             },
         }
     }
