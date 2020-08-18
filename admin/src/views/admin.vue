@@ -16,7 +16,7 @@
                     <a href="index.html" class="navbar-brand">
                         <small>
                             <i class="fa fa-leaf"></i>
-                            免费视频课程管理
+                            免费视频课程
                         </small>
                     </a>
                 </div>
@@ -422,22 +422,22 @@
                                 </router-link>
                                 <b class="arrow"></b>
                             </li>
-                            <li class="active" id="business-chapter-sidebar">
-                                <router-link to="/business/chapter">
-                                    <i class="menu-icon fa fa-caret-right"></i>
-                                    大章管理
-                                </router-link>
-                                <b class="arrow"></b>
-                            </li>
+<!--                            <li class="active" id="business-chapter-sidebar">-->
+<!--                                <router-link to="/business/chapter">-->
+<!--                                    <i class="menu-icon fa fa-caret-right"></i>-->
+<!--                                    大章管理-->
+<!--                                </router-link>-->
+<!--                                <b class="arrow"></b>-->
+<!--                            </li>-->
 
-                            <li class="active" id="business-section-sidebar">
-                                <router-link to="/business/section">
-                                    <i class="menu-icon fa fa-caret-right"></i>
-                                    小节管理
-                                </router-link>
+<!--                            <li class="active" id="business-section-sidebar">-->
+<!--                                <router-link to="/business/section">-->
+<!--                                    <i class="menu-icon fa fa-caret-right"></i>-->
+<!--                                    小节管理-->
+<!--                                </router-link>-->
 
-                                <b class="arrow"></b>
-                            </li>
+<!--                                <b class="arrow"></b>-->
+<!--                            </li>-->
 
 
                         </ul>
